@@ -1,0 +1,10 @@
+streamlit
+streamlit-option-menu
+python-dotenv
+pandas
+psycopg2-binary
+crewai
+crewai_tools
+langchain
+langchain-community
+langchain-groq
