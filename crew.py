@@ -19,22 +19,24 @@ st.set_page_config(page_title="ProAssist", page_icon=":material/smart_toy:")
 
 
 def init_database() -> SQLDatabase:
-    POSTGRES_USER='intellihealth'              
-    POSTGRES_PASSWORD='intellihealth'                         
-    POSTGRES_DB='intellihealth'
+    POSTGRES_USER=os.environ['POSTGRES_USER']
+    POSTGRES_PASSWORD=os.environ['POSTGRES_PASSWORD']                         
+    POSTGRES_DB=os.environ['POSTGRES_DB']
+    POSTGRES_HOST=os.environ['POSTGRES_HOST']
     # postgresql+psycopg2://user:password@host:port/dbname
     
-    DATABASE_URL= f'postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@216.48.179.123:5432/{POSTGRES_DB}' 
+    DATABASE_URL= f'postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:5432/{POSTGRES_DB}' 
     
     return SQLDatabase.from_uri(DATABASE_URL)
 
 def init_lis_database() -> SQLDatabase:
-    POSTGRES_USER='intellihealth'              
-    POSTGRES_PASSWORD='intellihealth'                         
-    POSTGRES_DB='lis-intellihealth'
+    POSTGRES_USER=os.environ['POSTGRES_USER']
+    POSTGRES_PASSWORD=os.environ['POSTGRES_PASSWORD']                         
+    POSTGRES_DB=os.environ['POSTGRES_LIS_DB']
+    POSTGRES_HOST=os.environ['POSTGRES_HOST']
     # postgresql+psycopg2://user:password@host:port/dbname
     
-    DATABASE_URL= f'postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@216.48.179.123:5432/{POSTGRES_DB}' 
+    DATABASE_URL= f'postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:5432/{POSTGRES_DB}' 
     
     return SQLDatabase.from_uri(DATABASE_URL)
 
