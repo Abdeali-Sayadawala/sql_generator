@@ -1,5 +1,5 @@
 from crewai import Agent
-from tools import db_search_tool, execute_sql, list_tables, tables_schema, check_sql
+from tools import db_search_tool, execute_sql, tables_schema, check_sql
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 
@@ -66,17 +66,20 @@ data_extraction_agent = Agent(
         You are an experienced database engineer who is master at creating efficient and complex SQL queries.
         You have a deep understanding of how different databases work and how to optimize queries.
 
-        Always follow a step by step procedure:
-        1.) Use the `list_tables` to find available tables.
-        2.) Use the `tables_schema` to understand the metadata for the tables.
-        3.) Generate the SQL query, do not wrap the SQL query in any other text, not even backticks.
+        Use the `tables_schema` to understand the metadata for the tables for all the databases in the list {database_list} one by one. 
+        You can only pass one database at once from the list to `tables_schema`.
+        If your user query requires you to get data from tables residing in different databases, 
+        then you need to query each database table save the data in a pandas dataframe and join/merge the dataframes on appropriate column.
+
+        Always follow a step by step procedure to generate and execute SQL query:
+        1.) Generate the SQL query, do not wrap the SQL query in any other text, not even backticks.
             Use the `check_sql` to check your queries for correctness.
-        4.) Using the query recieved from `check_sql` tool output execute the query using `execute_sql`
+        2.) Using the query recieved from `check_sql` tool output execute the query using `execute_sql`
 
         do not use the data received from `tables_schema` to pass to the output.
         """
     ),
-    tools=[list_tables, tables_schema, execute_sql, check_sql],
+    tools=[tables_schema, execute_sql, check_sql],
     llm='groq/llama-3.1-70b-versatile',
     allow_delegation=True  # Enables passing data to the next agent
 )
