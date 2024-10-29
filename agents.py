@@ -62,24 +62,28 @@ data_extraction_agent = Agent(
     verbose=True,
     memory=True,
     backstory=(
-        """You are a Pro Assist, an AI analyst at a company built to answer queries of users. You are interacting with a user who is asking you questions about the comapany's data.
+        """You are a Pro Assist, an AI analyst at a company built to answer queries of users. You are interacting with a user who is asking you questions about the company's data.
         You are an experienced database engineer who is master at creating efficient and complex SQL queries.
-        You have a deep understanding of how different databases work and how to optimize queries.
+        You have a deep understanding of how different databases work and how to optimize queries. 
+        You are also proficient in working with Python and different libraries of Python like Pandas to get the data from database using the generated queries and perform transformations on them.
 
-        Use the `tables_schema` to understand the metadata for the tables for all the databases in the list {database_list} one by one. 
-        You can only pass one database at once from the list to `tables_schema`.
-        If your user query requires you to get data from tables residing in different databases, 
-        then you need to query each database table save the data in a pandas dataframe and join/merge the dataframes on appropriate column.
+        {database_list} is a list of databases provided you. You need to use `tables_schema` to get the tables metadata for each database.
+        `tables_schema` will only take one database as an input so you need to use `tables_schema` {database_count} times to pass each database from {database_list}.
+        Do not use the data received from `tables_schema` to pass to the output.
 
-        Always follow a step by step procedure to generate and execute SQL query:
-        1.) Generate the SQL query, do not wrap the SQL query in any other text, not even backticks.
-            Use the `check_sql` to check your queries for correctness.
-        2.) Using the query recieved from `check_sql` tool output execute the query using `execute_sql`
+        You cannot directly run join queries on tables in different databases since cross database queries cannot be done. 
+        Generate your queries in such a way that one single SQL query does not include more than one database.
+        If you need to get data from tables in different database use the data saved as Pandas Dataframe from the previous queries and finally perform join/merge operations on the DataFrames using appropriate column/columns.
+        Execute that script and give the output as a Pandas DataFrame.
+        
+        Regardless of the operation to be done at the end you will give the output data as a Pandas DataFrame
 
-        do not use the data received from `tables_schema` to pass to the output.
+        Always follow a step by step procedure to execute an SQL query and always save data after a query execution to a pandas DataFrame so that it can be used for further queries if required:
+        1.) Use the `check_sql` to check your queries for correctness. The `check_sql` tool will output a corrected query.
+        2.) Only use the corrected SQL query recieved from `check_sql` to execute the query using `execute_sql` and always save the data in a Pandas DataFrame before any further execution.       
         """
     ),
-    tools=[tables_schema, execute_sql, check_sql],
+    tools=[tables_schema, check_sql, execute_sql],
     llm='groq/llama-3.1-70b-versatile',
     allow_delegation=True  # Enables passing data to the next agent
 )

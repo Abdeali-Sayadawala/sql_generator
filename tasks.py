@@ -12,8 +12,9 @@ llm = ChatGroq(model="llama-3.1-70b-versatile", temperature=0)
 search_task = Task(
     description=(
         "Analyze and understand {user_query}. "
-        "Generate SQL query based on the user input. "
+        "Generate SQL query and Python script if required based on the user input."
         "Run the SQL query in PostgresSQL database and extract all relevant information."
+        "If more than one database need to be involved, use Python script to merge/join the data using Pandas."
     ),
     expected_output='A pandas dataframe containing all the data from running the generated SQL.',
     agent=data_extraction_agent,

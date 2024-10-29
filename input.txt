@@ -1,0 +1,1 @@
+Tell me names of the Doctors that have consulted the patient John and the prescription that was assigned along with the contact number of the patient.

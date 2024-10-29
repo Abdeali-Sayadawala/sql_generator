@@ -11,6 +11,7 @@ from langchain_community.tools.sql_database.tool import (
 )
 from langchain_groq import ChatGroq
 import os
+import pandas as pd
 
 llm = ChatGroq(model="llama-3.1-70b-versatile", temperature=0)
 
@@ -76,6 +77,20 @@ def check_sql(database_nm: str, sql_query: str) -> str:
     tool before executing a query with `execute_sql`.
     """
     return QuerySQLCheckerTool(db=init_database(database_nm), llm=llm).invoke({"query": sql_query})
+
+# Tool 5: Merges two pandas dataframes and gives the output.
+# @tool("merge_df")
+# def merge_df(df_1: pd.DataFrame, df_2: pd.DataFrame, merge_columns: list, merge_type=None) -> pd.DataFrame:
+#     """
+#     Name: merge_df
+#     Description: Use this tool to merge two pandas dataframes.
+#     merge_columns argument will  be a list of columns on which the two dataframe is supposed to be merged on.
+#     merge_type argument will be optional, it will denote how df_2 will be merged into df_1.
+#     """
+#     if merge_type:
+#         pd.merge(df_1, df_2, how=merge_type, on=merge_columns)
+#     else:
+#         pd.merge(df_1, df_2, on=merge_columns)
 
 # file_search_tool = CSVSearchTool(csv=['../staff_data.csv', '../management_data.csv', '../patient_data.csv'])
 
