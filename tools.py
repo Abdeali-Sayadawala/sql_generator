@@ -1,5 +1,6 @@
 from crewai_tools import NL2SQLTool
 from crewai_tools import tool
+from sqlalchemy import create_engine
 from langchain_community.utilities.sql_database import SQLDatabase
 from langchain_community.tools.sql_database.tool import (
     InfoSQLDatabaseTool,
@@ -17,15 +18,26 @@ llm = ChatGroq(model="llama-3.1-70b-versatile", temperature=0)
 # db = SQLDatabase.from_uri(os.getenv("DATABASE_URL"))
 
 def init_database(database_nm) -> SQLDatabase:
-    POSTGRES_USER=os.environ['POSTGRES_USER']
-    POSTGRES_PASSWORD=os.environ['POSTGRES_PASSWORD']                         
-    POSTGRES_DB=database_nm
-    POSTGRES_HOST=os.environ['POSTGRES_HOST']
+    MYSQL_USER=os.environ['MYSQL_USER']
+    MYSQL_PASSWORD=os.environ['MYSQL_PASSWORD']                         
+    MYSQL_DB=database_nm
+    MYSQL_HOST=os.environ['MYSQL_HOST']
     # postgresql+psycopg2://user:password@host:port/dbname
     
-    DATABASE_URL= f'postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:5432/{POSTGRES_DB}' 
-    
-    return SQLDatabase.from_uri(DATABASE_URL)
+    DATABASE_URL= f'mysql+mysqlconnector://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}:3306/{MYSQL_DB}'
+    print(database_nm, DATABASE_URL)
+
+    # engine = create_engine(DATABASE_URL, echo=True)    
+    # return engine
+    try:
+        engine = SQLDatabase.from_uri(DATABASE_URL)
+        # engine = create_engine(DATABASE_URL, echo=True)
+        return engine
+    except Exception as e:
+        print(e)
+        return e
+    finally:
+        print("connection completed")
 
 # db = init_database()
 # print(ListSQLDatabaseTool(db=db).invoke(""))
@@ -51,6 +63,7 @@ def tables_schema(database_nm: str) -> str:
     # tool = InfoSQLDatabaseTool(db=init_database(database_nm))
     # return tool.invoke(tables)
     db = init_database(database_nm)
+    print(database_nm)
     return db.get_table_info()
 
 # print(tables_schema.run("salaries"))

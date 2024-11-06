@@ -10,9 +10,7 @@ search_task = Task(
     description=(
         "Analyze and understand {user_query}. "
         "Generate SQL query and Python script if required based on the user input."
-        "Run the SQL query in PostgresSQL database and extract all relevant information."
-        "If more than one database need to be involved, use Python script to merge/join the data using Pandas."
-        "Execute the SQL query and/or Python script and return the results."
+        "Run the SQL query in MySQL database and extract all relevant information."
     ),
     expected_output='A pandas dataframe containing all the data from running the generated SQL.',
     agent=data_extraction_agent,

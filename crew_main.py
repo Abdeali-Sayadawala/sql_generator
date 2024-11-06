@@ -10,8 +10,9 @@ load_dotenv()
 # import sys
 # sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
-database_list = os.environ['POSTGRES_DB'].split(",")
+database_list = os.environ['MYSQL_DB'].split(",")
 print("database_list: ", database_list)
+
 
 user_query = open('input.txt', 'r').read()
 print("user query: ", user_query)
@@ -28,7 +29,8 @@ crew = Crew(
 
 # Start the execution of the crew with user input
 print("starting Crew...")
-result = crew.kickoff(inputs={'user_query': user_query, 'database_list': database_list, 'database_count': len(database_list)})
+# result = crew.kickoff(inputs={'user_query': user_query, 'database_list': database_list, 'database_count': len(database_list)})
+result = crew.kickoff(inputs={'user_query': user_query, 'database_list': database_list[0]})
 
 # Display results in Streamlit app
 print(result)
