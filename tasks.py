@@ -1,12 +1,9 @@
 from crewai import Task
-from tools import db_search_tool
 from agents import data_analyst_agent, visualisation_agent, data_extraction_agent
-from langchain_groq import ChatGroq
+from tools import db_search_tool
 from dotenv import load_dotenv
 
 load_dotenv()
-
-llm = ChatGroq(model="llama-3.1-70b-versatile", temperature=0)
 
 # Information Retrieval Task
 search_task = Task(
@@ -15,6 +12,7 @@ search_task = Task(
         "Generate SQL query and Python script if required based on the user input."
         "Run the SQL query in PostgresSQL database and extract all relevant information."
         "If more than one database need to be involved, use Python script to merge/join the data using Pandas."
+        "Execute the SQL query and/or Python script and return the results."
     ),
     expected_output='A pandas dataframe containing all the data from running the generated SQL.',
     agent=data_extraction_agent,

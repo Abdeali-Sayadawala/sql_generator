@@ -1,11 +1,8 @@
 from crewai import Agent
 from tools import db_search_tool, execute_sql, tables_schema, check_sql
-from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 
 load_dotenv()
-
-llm = ChatGroq(model="llama-3.1-70b-versatile", temperature=0)
 
 data_analyst_agent = Agent(
     role='Question Answering Agent From Data',
@@ -76,7 +73,7 @@ data_extraction_agent = Agent(
         If you need to get data from tables in different database use the data saved as Pandas Dataframe from the previous queries and finally perform join/merge operations on the DataFrames using appropriate column/columns.
         Execute that script and give the output as a Pandas DataFrame.
         
-        Regardless of the operation to be done at the end you will give the output data as a Pandas DataFrame
+        Regardless of the operation to be done at the end you will return the output data as a Pandas DataFrame
 
         Always follow a step by step procedure to execute an SQL query and always save data after a query execution to a pandas DataFrame so that it can be used for further queries if required:
         1.) Use the `check_sql` to check your queries for correctness. The `check_sql` tool will output a corrected query.

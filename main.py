@@ -180,21 +180,12 @@ if selected == "Home":
             st.markdown(user_query)
             
         with st.chat_message("AI"):
-            # To check SQL Query
-            # sql_chain = get_sql_chain(st.session_state.db)
-            # response = sql_chain.invoke({
-            #     "chat_history": st.session_state.chat_history,
-            #     "question": user_query
-            # })
             
-            # To check Natural Language Response From LLM
-            # response = get_response(user_query, st.session_state.db, st.session_state.chat_history)
-            # st.markdown(response)
             result = crew.kickoff(inputs={'user_query': user_query, 'database_list': database_list, 'database_count': len(database_list)})
 
             print(result)
             
-        st.session_state.chat_history.append(AIMessage(content=response))
+        st.session_state.chat_history.append(AIMessage(content=result))
 
 
 if selected == "Setup":

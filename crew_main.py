@@ -1,8 +1,7 @@
-from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 from crewai import Crew, Process
-from agents import data_analyst_agent, visualisation_agent, data_extraction_agent
-from tasks import search_task, visualize_task
+from agents import data_extraction_agent
+from tasks import search_task
 import os
 
 load_dotenv()
