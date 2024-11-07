@@ -1,6 +1,6 @@
 from crewai import Task
 from agents import data_analyst_agent, visualisation_agent, data_extraction_agent
-from tools import db_search_tool
+# from tools import db_search_tool
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -9,7 +9,7 @@ load_dotenv()
 search_task = Task(
     description=(
         "Analyze and understand {user_query}. "
-        "Generate SQL query and Python script if required based on the user input."
+        "Generate SQL query based on the user input."
         "Run the SQL query in MySQL database and extract all relevant information."
     ),
     expected_output='A pandas dataframe containing all the data from running the generated SQL.',
@@ -62,7 +62,7 @@ visualize_task = Task(
         """
     ),
     expected_output='a clear plot/graph of .jpg image type',
-    tools=[db_search_tool],
+    # tools=[db_search_tool],
     agent=visualisation_agent,
     async_execution=False, # To enable both the agents working in parallel
     output_file='generated_image.jpg'

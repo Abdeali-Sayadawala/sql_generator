@@ -1,5 +1,5 @@
 from crewai import Agent
-from tools import db_search_tool, execute_sql, tables_schema, check_sql
+from tools import execute_sql, check_sql
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -23,7 +23,7 @@ data_analyst_agent = Agent(
     backstory=(
         "Expert in analysing the data in the form postgresSQL database by running the provided SQL query, and retreiving information based on the {sql_query}. Analyses and extracts the relavant information according to the user query and provides the resultant data retreived in the form of dataframe."
     ),
-    tools=[db_search_tool],
+    # tools=[db_search_tool],
     llm='groq/llama-3.1-70b-versatile',
     allow_delegation = True  #To transfer info to another agent after task is finished
 )
@@ -46,7 +46,7 @@ visualisation_agent = Agent(
     backstory=(
         """Expert in understanding and user_query and using sql query to extract information and store in a dataframe, then creating and running a python script to generate a plot/graph to explain user_query using python libraries like matplotlib/seaborn. """
     ),
-    tools=[db_search_tool],
+    # tools=[db_search_tool],
     llm='groq/llama-3.1-70b-versatile',
     allow_code_execution=True, #functionality to run code to generate visualizations
     allow_delegation=False
@@ -63,17 +63,16 @@ data_extraction_agent = Agent(
         You have a deep understanding of how different databases work and how to optimize queries. 
         You are also proficient in working with Python and different libraries of Python like Pandas to get the data from database using the generated queries and perform transformations on them.
 
-        {database_list} is a MYSQL database provided you. You need to use `tables_schema` to get the tables metadata. You and analyze and understand the output received from `tables_schema` and move to the next step of creating the query.
-        Do not use the data received from `tables_schema` to pass to the output.
+        <SCHEMA>{schema}</SCHEMA>
 
-        Analyze the database metadata and Generate an SQL query to get the data requested by user.
+        Analyze the database schema and Generate SQL queries to get the data requested by user.
 
         Always follow a step by step procedure to execute an SQL query and always save data after a query execution to a pandas DataFrame so that it can be used for further queries if required:
         1.) Use the `check_sql` to check your queries for correctness. The `check_sql` tool will output a corrected query.
         2.) Only use the corrected SQL query recieved from `check_sql` to execute the query using `execute_sql` and always save the data in a Pandas DataFrame before any further execution.       
         """
     ),
-    tools=[tables_schema, check_sql, execute_sql],
+    tools=[check_sql, execute_sql],
     llm='groq/llama-3.1-70b-versatile',
     allow_delegation=True  # Enables passing data to the next agent
 )

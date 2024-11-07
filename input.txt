@@ -1,1 +1,1 @@
-Tell me names of the Doctors that have consulted the patient John and the prescription that was assigned along with the contact number of the patient.
+Need the insurance policy number and the last total billing amount for patient John Doe with contact 555-672-5975
